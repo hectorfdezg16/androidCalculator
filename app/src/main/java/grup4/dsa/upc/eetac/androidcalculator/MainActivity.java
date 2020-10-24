@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private Switch switchdeg;
 
     //variable boolean para comprobar estado switch
-    private Boolean switchstate= switchdeg.isChecked();
+    //private Boolean switchstate= switchdeg.isChecked();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -475,18 +475,16 @@ public class MainActivity extends AppCompatActivity {
 
         //operación switch
         //REVISAR ESTA OPERACIÓN
-        //switchdeg.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View v) {
-        //        if(view.getId()==R.id.switch1){
-        //            if(switchdeg.isChecked()){
-        //                angleInDegree= Double.parseDouble(text_response.getText().toString());
-        //                angleInRadian=Math.toRadians(angleInDegree);
-        //            }
-        //        }
-        //        else{}
-        //    }
-        //});
+        switchdeg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    if(switchdeg.isChecked()){
+                        angleInDegree= Double.parseDouble(text_response.getText().toString());
+                        angleInRadian=Math.toRadians(angleInDegree);
+                }
+                else{}
+            }
+        });
 
         //función igual
         btn_equal.setOnClickListener(new View.OnClickListener() {
@@ -523,8 +521,5 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-
     }
 }
