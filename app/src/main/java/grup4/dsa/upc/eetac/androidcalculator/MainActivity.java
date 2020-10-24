@@ -4,7 +4,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 // calculadora muy parecido al estilo MACOS
 // mismo mapa de colores (check)
@@ -38,13 +40,16 @@ public class MainActivity extends AppCompatActivity {
     //variable de cadena de caracteres para guardar temporalmente todos los numeros que insertemos
     private String present, operator, backup;
     //resultado de todas nuestras operaciones
-    private double result;
+    private double result, angleInDegree, angleInRadian;
 
     //declaracion variable TextView donde añadiremos respuesta calculadora
-    TextView text_response;
+    private TextView text_response;
 
     //nos faltara declaracion variable "switch" para manejarlo
+    private Switch switchdeg;
 
+    //variable boolean para comprobar estado switch
+    private Boolean switchstate= switchdeg.isChecked();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
         btn_point = (Button)findViewById(R.id.pointButton);
         btn_equal = (Button)findViewById(R.id.equalButton);
         text_response=(TextView)findViewById(R.id.textView);
+        switchdeg=(Switch)findViewById(R.id.switch1);
 
         //ahora vamos con la implementacion de la interfaz setOnClickListener que llevara dentro el metodo onClick
         //esto es un clase anonima porque es una interfaz que no requiere implements en el MainActivity
@@ -212,9 +218,7 @@ public class MainActivity extends AppCompatActivity {
                 //introducir un cero si no hay otro número previamente
                 //enviamos un toast para notificarle del error cometido
                 if(text_response.getText().toString().isEmpty()){
-                    //Toast.makeText(MainActivity.this,"",Toast.LENGTH_SHORT).present();
-                    //he decidido no implementar el Toast para que simplemente si el usuario pulse el 0 no suceda nada...
-                    //y no esté constantemente avisando al usuario de que no es correcto lo que está introduciendo
+                    Toast.makeText(MainActivity.this,"¡Ya hay un cero en pantalla!", Toast.LENGTH_SHORT).show();
                 }
 
                 //si el TextView no está vacio entonces ya podemos introducir el cero y concatenerlo con otra operación
@@ -352,6 +356,138 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //empezamos con las funciones trigonométricas
+        //empezamos con la operación Sin
+        btn_sin.setOnClickListener(new View.OnClickListener() {
+
+            //cuerpo sobrescrito
+            @Override
+            public void onClick(View v) {
+
+                //si el TextView está vacío no se podrá ejecutar la operación Sin...
+                //y se lo notificaremos al usuario mediante un Toast
+                if(text_response.getText().toString().isEmpty()){
+                    Toast.makeText(MainActivity.this,"¡Introduce un número antes de aplicar la operación Sin", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    //aquí es lo que va a realizar botón al pusarlo
+                    //capturamos lo que hay en el TextView
+                    backup= text_response.getText().toString();
+                    //las operaciones trigonométricas no las vamos a hacer igual que las otras operaciones...
+                    //ya que sería un poco complejo hacerlo para añadir otro número seguidamente...
+                    //nosotros en el momento de dar al botón Sin ya le mostraremos el resultado
+                    result=Math.sin(Double.parseDouble(backup));
+                    text_response.setText(String.valueOf(result));
+                    //deshabilitamos el botón punto para que no introduzca otro número...
+                    //sin previamente introducir la operación que quiera realizar
+                    btn_point.setEnabled(false);
+                }
+            }
+        });
+
+        //seguimos con la operación Cos
+        btn_cos.setOnClickListener(new View.OnClickListener() {
+
+            //cuerpo sobrescrito
+            @Override
+            public void onClick(View v) {
+                if(text_response.getText().toString().isEmpty()){
+                    Toast.makeText(MainActivity.this,"¡Introduce un número antes de aplicar la operación Cos", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    backup= text_response.getText().toString();
+                    result=Math.cos(Double.parseDouble(backup));
+                    text_response.setText(String.valueOf(result));
+                    btn_point.setEnabled(false);
+                }
+            }
+        });
+
+        //seguimos con la operación Tan
+        btn_tan.setOnClickListener(new View.OnClickListener() {
+
+            //cuerpo sobrescrito
+            @Override
+            public void onClick(View v) {
+                if(text_response.getText().toString().isEmpty()){
+                    Toast.makeText(MainActivity.this,"¡Introduce un número antes de aplicar la operación Tan", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    backup= text_response.getText().toString();
+                    result=Math.tan(Double.parseDouble(backup));
+                    text_response.setText(String.valueOf(result));
+                    btn_point.setEnabled(false);
+                }
+            }
+        });
+
+        //introducir el número PI
+        btn_pi.setOnClickListener(new View.OnClickListener() {
+
+            //cuerpo sobrescrito
+            @Override
+            public void onClick(View v) {
+                if(text_response.getText().toString().isEmpty()){
+                    present= text_response.getText().toString();
+                    present=present + Math.PI;
+                    text_response.setText(present);
+                }
+                else{
+                    Toast.makeText(MainActivity.this,"¡Haz una operación antes de utilizar el número PI!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        //introducir el número e
+        btn_e.setOnClickListener(new View.OnClickListener() {
+
+            //cuerpo sobrescrito
+            @Override
+            public void onClick(View v) {
+                if(text_response.getText().toString().isEmpty()){
+                    present= text_response.getText().toString();
+                    present=present + Math.E;
+                    text_response.setText(present);
+                }
+                else{
+                    Toast.makeText(MainActivity.this,"¡Haz una operación antes de utilizar el número e!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        //introducir el porcentaje
+        btn_percentage.setOnClickListener(new View.OnClickListener() {
+
+            //cuerpo sobrescrito
+            @Override
+            public void onClick(View v) {
+                if(text_response.getText().toString().isEmpty()){
+                    Toast.makeText(MainActivity.this,"¡Introduce un número para poder hacer el tanto por ciento!", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    backup= text_response.getText().toString();
+                    result=Double.parseDouble(backup)/100;
+                    text_response.setText(String.valueOf(result));
+                    btn_point.setEnabled(false);
+                }
+            }
+        });
+
+        //operación switch
+        //REVISAR ESTA OPERACIÓN
+        //switchdeg.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View v) {
+        //        if(view.getId()==R.id.switch1){
+        //            if(switchdeg.isChecked()){
+        //                angleInDegree= Double.parseDouble(text_response.getText().toString());
+        //                angleInRadian=Math.toRadians(angleInDegree);
+        //            }
+        //        }
+        //        else{}
+        //    }
+        //});
+
         //función igual
         btn_equal.setOnClickListener(new View.OnClickListener() {
 
@@ -385,7 +521,6 @@ public class MainActivity extends AppCompatActivity {
                     result=Double.parseDouble(backup) / Double.parseDouble(text_response.getText().toString());
                     text_response.setText(String.valueOf(result));
                 }
-
             }
         });
 
